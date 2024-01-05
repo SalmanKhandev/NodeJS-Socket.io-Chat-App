@@ -1,0 +1,309 @@
+
+<!-- Stylesheets
+    ================================================= -->
+<link rel="stylesheet" href="/new/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/new/css/style.css" />
+<link rel="stylesheet" href="/new/css/ionicons.min.css" />
+<!-- <link rel="stylesheet" href="/new/css/font-awesome.min.css" /> -->
+<!--     <link href="public/css/bootstrap/bootstrap.min.css" rel="stylesheet">
+ -->
+ 
+<link href="/new/public/css/fontawesome-all.min.css" rel="stylesheet">
+<link href="/new/public/css/style.css" rel="stylesheet">
+<!-- Favicon-->
+<script type="text/javascript" src="/new/public/js/jquery.min.js"></script>
+<!-- Bootstrap depedency-->
+<!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.5/umd/popper.min.js"></script> -->
+<!-- <script type="text/javascript" src="/new/public/js/bootstrap/bootstrap.min.js"></script> -->
+<script type="text/javascript" src="/new/public/js/app.js"></script>
+<!--Google Font-->
+<link href="https://fonts.googleapis.com/css?family=Lato:300,400,400i,700,700i" rel="stylesheet">
+
+
+</head>
+
+<body>
+
+  <!-- Header
+    ================================================= -->
+  <header class="navbar" role="banner">
+    <div class="container">
+      <div class="navbar__group navbar__group_left">
+        <ul class="navbar__main-navigation">
+          <li>
+            <a href="/home" title="Home">
+              <i class="fas fa-home" aria-hidden="true"></i>
+              <span>Home</span>
+            </a>
+          </li>
+          <!--   <li>
+                            <a href="/users/5b19f2547f6e670004202ccf" title="Profile">
+                                <i class="fas fa-user" aria-hidden="true"></i>
+                                <span>Profile</span>
+                            </a>
+                        </li> -->
+          <!--  <li>
+                            <a href="/analytics/" title="analytics">
+                                <i class="fas fa-chart-line" aria-hidden="true"></i>
+                                <span>Analytics</span>
+                            </a>
+                        </li> -->
+          <li>
+            <a title="Inbox" data-toggle="modal" id="val" data-target="#search">
+              <i class="fa fa-search fa-sm" aria-hidden="true"></i>
+              <span>Search</span>
+            </a>
+          </li>
+          <li>
+            <a href="/chat/" title="chat">
+              <i class="far fa-comments" aria-hidden="true"></i>
+              <span>Chat Users</span>
+            </a>
+          </li>
+          <li>
+            <a title="activity" data-toggle="modal" id="val" data-target="#myModal2">
+              <i class="far fa-bell" aria-hidden="true"></i>
+              <span class="d-lg-none">
+                <% if(data.totalRequest > 0) { %>
+                  <span style="background-color: #fb434a;" class="badge badge-pill badge-primary">
+                    <%= data.request.length %>New</span>
+                  <% }else{ %>
+                    <span style="background-color: #fb434a;" class="badge badge-pill badge-primary">0</span>
+                    <% } %>
+              </span>
+            </a>
+          </li>
+          <li>
+            <% var numberOfTrue = 0 %>
+            
+              <% for(var i=0; i < chat.length; i++) { 
+                if(chat[i].body.isRead === false){
+                    numberOfTrue = numberOfTrue + 1
+                }
+             }  %>
+            <a data-toggle="modal" id="val" data-target="#myModal">
+              <i class="far fa-envelope"></i>
+              <span class="d-lg-none">
+                <% if(numberOfTrue !== 0) { %>
+                <span style="background-color: #fb434a;" class="badge badge-pill badge-primary"><%= numberOfTrue %> New</span>
+                <% }else{ %>
+                <span style="background-color: #fb434a;" class="badge badge-pill badge-primary">0</span>
+                <% } %>
+              </span>
+            </a>
+          </li>
+        </ul>
+        
+      </div>
+      <span class="navbar__logo">
+        <a href="/home">
+          <img src="/images/logo.png">
+        </a>
+      </span>
+      <div class="navbar__group navbar__group_right">
+        <div class="navbar__profile">
+          <div id="drops" class="navbar__profile-logout" href="/logout" title="logout">
+            <li  class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><%= _.upperFirst(user.username) %></a>
+                  <ul class="dropdown-menu newsfeed-home">
+                    <li><a href="/settings/profile"><i class="far fa-user"></i> Edit Profile</a></li>
+                    <div class="line"></div>
+                    <li><a href="/logout">logout</a></li>
+                  </ul>
+              </li>
+               <img class="tweet__image chat-image logout-image" src="https://avatars2.githubusercontent.com/u/36805164?v=4">
+            <!-- <span>Logout</span> -->
+            </div>
+        </div>
+        
+      </div>
+    </div>
+  </header>
+  
+  <%- include message.ejs %>
+  <div id="myModal2" class="new-tweet modal fade">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button class="close" type="button" data-dismiss="modal" aria-hidden="true">×</button>
+          <h4 class="modal-title">New Notfication</h4>
+        </div>
+  
+        <div class="modal-body">
+          <li class="scrollable-container media-list" id="reload">
+                <% if(data.request.length > 0) { %>
+                  <% _.forEach(data.request, function(val) { %>
+                <div class="media tweet__form">
+                      <img class="tweets__comment-image" src="https://avatars2.githubusercontent.com/u/36805164?v=4">
+                      <span class="tweet__username">
+                            <p><%= val.username %></p>
+                        </span>
+          
+                    <!-- accept -->
+                    <span class="accept tweet__form">
+                      <input type="hidden" name="senderId" id="senderId" value="<%= val.userId._id %>">
+                      <input type="hidden" name="senderName" id="senderName" value="<%= val.username%>">
+                      <input type="submit" name="accept" id="accept_friend" class="btn " value="accept">
+                    </span>
+                    <!-- cancel -->
+                    <span class="accept tweet__form">
+                      <input type="hidden" name="user_Id" id="user_Id" value="<%= val.userId._id %>">
+                      <input type="submit" name="cancel" id="cancel_friend" class="btn " value="cancel">
+                    </span>
+                  </span>
+                </div>
+                <% }) %>
+                  <% } else { %>
+              <div class="dropdown-menu-footer">
+                <p class="text-center" style="color: red;">No Friend Request</p>
+                 <a class="dropdown-item text-muted text-center" href="javascript:void(0)">Read all messages</a>
+             </div>
+              <% } %>
+          </li>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="gr-rightsidebar">
+  
+
+   
+  </div>
+  <!--Header End-->
+
+
+  <div id="search" class="new-tweet modal fade">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        
+  
+        <div class="modal-body">
+          <form action="/results" method="post">
+          <div class="search">
+            <input name="country" id="search" type="search" class="search-box" placeholder="Search For Groups..." />
+            <button style="padding: 20px;" class="btn btn-primary btn-bg" id="search-form">search
+            </button>
+          </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+background-color: #2A2E37;
+search-bg-color: #242628;
+icon-color: #00FEDE;
+transition: all .5s ease;
+
+
+.search {
+  width: 100px;
+  height: 100px;
+  margin: 40px auto 0;
+  background-color: #242628;
+  position: relative;
+  overflow: hidden;
+  transition: all .5s ease;
+  &:before {
+    content: '';
+    display: block;
+    width: 3px;
+    height: 100%;
+    position: relative;
+    background-color: #00FEDE;
+    transition: all .5s ease;
+  }
+  &.open {
+    width: 420px;
+    &:before {
+      height: 60px;
+      margin: 20px 0 20px 30px;
+      position: absolute;
+    }
+  }
+}
+
+.search-box {
+  width: 100%;
+  height: 100%;
+  box-shadow: none;
+  border: none;
+  background: transparent;
+  color: #fff;
+  padding: 20px 100px 20px 45px;
+  font-size: 40px;
+  &:focus {
+    outline: none;
+  }
+}
+
+.search-button {
+  width: 100px;
+  height: 100px;
+  display: block;
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 20px;
+  cursor: pointer;
+}
+
+.search-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 40px;
+  border: 3px solid #00FEDE;
+  display: block;
+  position: relative;
+  margin-left: 5px;
+  transition: all .5s ease;
+  &:before {
+    content: '';
+    width: 3px;
+    height: 15px;
+    position: absolute;
+    right: -2px;
+    top: 30px;
+    display: block;
+    background-color: #00FEDE;
+    transform: rotate(-45deg);
+    transition: $transition;
+  }
+  &:after {
+    content: '';
+    width: 3px;
+    height: 15px;
+    position: absolute;
+    right: -12px;
+    top: 40px;
+    display: block;
+    background-color: #00FEDE;
+    transform: rotate(-45deg);
+    transition: $transition;
+  }
+  .open & {
+    margin: 0;
+    width: 60px;
+    height: 60px;
+    border-radius: 60px;
+    &:before {
+      transform: rotate(52deg);
+      right: 22px;
+      top: 23px;
+      height: 18px;
+    }
+    &:after {
+      transform: rotate(-230deg);
+      right: 22px;
+      top: 13px;
+      height: 18px;
+    }
+  }
+}
+  </style>
+
+  <script>
+  $('.search-button').click(function () {
+      $(this).parent().toggleClass('open');
+    });</script>

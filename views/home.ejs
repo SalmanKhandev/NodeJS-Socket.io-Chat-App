@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow" />
+  <title>GPchat | Home</title>
+
+  <%- include partials/navbar.ejs %>
+
+  <div id="page-contents">
+    <div class="container">
+      <div class="row">
+
+        <!-- Newsfeed Common Side Bar Left
+          ================================================= -->
+        <div class="col-md-3 static">
+          <div class="profile-card">
+            <img src="http://placehold.it/300x300" alt="user" class="profile-photo" />
+            <h5>
+              <a href="timeline.html" class="text-white"><%= user.username %></a>
+            </h5>
+            <a href="#" class="text-white">
+              <i class="ion ion-android-person-add"></i> 1,299 followers</a>
+          </div>
+          <!--profile card ends-->
+          <ul class="nav-news-feed">
+            <li>
+              <i class="icon ion-ios-paper"></i>
+              <div>
+                <a href="/news/tech">Latest News</a>
+              </div>
+            </li>
+            <li>
+              <i class="icon ion-ios-search-strong"></i>
+              <div>
+                <a href="/members">Search</a>
+              </div>
+            </li>
+            <li>
+              <i class="icon ion-ios-people-outline"></i>
+              <div>
+                <a href="#">Friends</a>
+              </div>
+            </li>
+            <li>
+              <i class="icon ion-chatboxes"></i>
+              <div>
+                <a href="#">Messages</a>
+              </div>
+            </li>
+            <!-- <li>
+              <i class="icon ion-images"></i>
+              <div>
+                <a href="newsfeed-images.html">Images</a>
+              </div>
+            </li>
+            <li>
+              <i class="icon ion-ios-videocam"></i>
+              <div>
+                <a href="newsfeed-videos.html">Videos</a>
+              </div>
+            </li> -->
+          </ul>
+          <!--news-feed links ends-->
+          <div id="chat-block">
+            <div class="title">Chat online</div>
+            <ul class="online-users list-inline">
+              <li>
+                <a href="newsfeed-messages.html" title="Linda Lohan">
+                  <img src="http://placehold.it/300x300" alt="user" class="img-responsive profile-photo" />
+                  <span class="online-dot"></span>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <!--chat block ends-->
+        </div>
+
+        <div class="col-md-7">
+
+          <!-- Post Create Box
+            ================================================= -->
+          <div class="create-post">
+            <div class="row">
+              <div class="col-md-7 col-sm-7">
+                <div class="form-group">
+                  <img src="http://placehold.it/300x300" alt="" class="profile-photo-md" />
+                  <textarea name="texts" id="exampleTextarea" cols="30" rows="1" class="form-control" placeholder="Write what you wish"></textarea>
+                </div>
+              </div>
+              <div class="col-md-5 col-sm-5">
+                <div class="tools">
+                  <ul class="publishing-tools list-inline">
+                    <li>
+                      <a href="#">
+                        <i class="ion-compose"></i>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#">
+                        <i class="ion-images"></i>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#">
+                        <i class="ion-ios-videocam"></i>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#">
+                        <i class="ion-map"></i>
+                      </a>
+                    </li>
+                  </ul>
+                  <button class="btn btn-primary pull-right">Publish</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Post Create Box End -->
+
+          <!-- Media
+            ================================================= -->
+          <div class="media">
+            <div class="row js-masonry" data-masonry='{ "itemSelector": ".grid-item", "columnWidth": ".grid-sizer", "percentPosition": true }'>
+              <div class="grid-sizer col-md-6 col-sm-6"></div>
+
+              <form action="/home" method="POST" id="favorite">
+                <% _.forEach(chunks, function(val) {  %>
+                    <% _.forEach(val, function(val2) {  %>
+              <div class="grid-item col-md-6 col-sm-6">
+                <div class="media-grid">
+                  <div class="img-wrapper" data-toggle="modal" data-target=".modal-2">
+                    <img src="/uploads/<%= val2.image %>" alt="" class="img-responsive post-image" />
+                  </div>
+                  <div class="media-info">
+                    <div class="reaction">
+                      <a class="btn text-green">
+                        <input type="hidden" name="id" id="id" value="<%= val2._id %>">
+                        <input type="hidden" name="gpName" id="gp_Name" value="<%= val2.name%>">
+                        <i class="fa fa-thumbs-up"></i> <%= val2.fans.length %></a>
+                      <a class="btn text-red">
+                        <i class="fa fa-thumbs-down"></i> 0</a>
+                      <a href="/group/<%= val2.name.replace(/ /g, "-") %>" class="btn text-red">
+                        <i class="fa fa-user-circle"></i> Enter</a>
+                    </div>
+                    <div class="user-info">
+                      <img src="http://placehold.it/300x300" alt="" class="profile-photo-sm pull-left" />
+                      <div class="user">
+                        <h6>
+                          <a href="/group/<%= val2.name.replace(/ /g, "-") %>" class="profile-link"><%= val2.name %></a>
+                        </h6>
+                        <a class="text-green" href="#"><%= val2.country %></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <% }) %>
+              <% }) %>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Newsfeed Common Side Bar Right
+          ================================================= -->
+        <div class="col-md-2 static">
+          <div class="suggestions" id="sticky-sidebar">
+            <h4 class="grey">Who to Follow</h4>
+            <div class="follow-user">
+              <img src="http://placehold.it/300x300" alt="" class="profile-photo-sm pull-left" />
+              <div>
+                <h5>
+                  <a href="timeline.html">Zube Ab</a>
+                </h5>
+                <a href="#" class="text-green">Add friend</a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- Scripts
+    ================================================= -->
+  <script src="new/js/jquery-3.1.1.min.js"></script>
+  <script src="new/js/bootstrap.min.js"></script>
+  <script src="new/js/masonry.pkgd.min.js"></script>
+  <script src="new/js/jquery.sticky-kit.min.js"></script>
+  <script src="new/js/jquery.scrollbar.min.js"></script>
+  <script src="new/js/script.js"></script>
+
+</body>
+
+</html>

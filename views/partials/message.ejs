@@ -1,0 +1,64 @@
+<% var numberOfTrue = 0 %>
+
+<% for(var i=0; i < chat.length; i++) { 
+    if(chat[i].body.isRead === false){
+        numberOfTrue = numberOfTrue + 1
+    }
+ }  %>
+
+<div id="myModal" class="new-tweet modal fade" id="reload">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" type="button" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">New Message</h4>
+            </div>
+            <div class="modal-body">
+                <% if(chat.length > 0) { %>
+                    <% _.forEach(chat, function(val) { %>
+                        <% if(user.username !== val.body.senderName) { %>
+                <a data-value="<%= val.body._id %>" id="messageLink" href="/chat/<%= _.lowerCase(val.body.senderName.replace(/ /g, '-')) %>.<%= _.lowerCase(user.username.replace(/ /g, '-')) %>">
+                    <img class="tweets__comment-image" src="https://avatars2.githubusercontent.com/u/36805164?v=4">
+                    <span class="tweet__username-date">
+                        <% if(user.username !== val.body.receiverName.replace(/ /g, '-')) { %>
+                        <span class="tweet__username">
+                            <a href="/chat/<%= _.lowerCase(val.body.receiverName.replace(/ /g, '-'))%>.<%= _.lowerCase(user.username) %>"><%= val.body.receiverName.replace(/ /g, '-') %></a>
+                        </span>
+                        <% }else { %>
+                        <span class="tweet__username">
+                            <a href="/chat/<%= _.lowerCase(val.body.senderName).replace(/ /g, '-') %>.<%= _.lowerCase(user.username.replace(/ /g, '-')) %>"><%= val.body.senderName.replace(/ /g, '-') %></a>
+                        </span>
+                        <% } %>
+                        <span class="tweet__date"> • June 8, 2018</span>
+                        <p class="tweet__content"><%= val.body.message %></p>
+                        <input type="hidden" name="chatId" id="chatId" value="<%= val.body._id %>">
+                    </span>
+                </a>
+                <% }else if(user.username === val.body.senderName.replace(/ /g, '-')){ %>
+                <a data-value="<%= val.body._id %>" id="messageLink" href="/chat/<%= _.lowerCase(val.body.senderName.replace(/ /g, '-')) %>.<%= _.lowerCase(user.username.replace(/ /g, '-')) %>">
+                    <img class="tweets__comment-image" src="https://avatars2.githubusercontent.com/u/36805164?v=4">
+                    <span class="tweet__username-date">
+                        <% if(user.username !== val.body.receiverName) { %>
+                        <span class="tweet__username">
+                            <a data-value="/chat/<%= _.lowerCase(val.body.senderName.replace(/ /g, '-')) %>.<%= _.lowerCase(user.username.replace(/ /g, '-')) %>" href="/chat/<%= _.lowerCase(val.body.receiverName.replace(/ /g, '-')) %>.<%= _.lowerCase(user.username) %>"><%= val.body.receiverName.replace(/ /g, '-') %></a>
+                        </span>
+                        <% }else { %>
+                        <span class="tweet__username">
+                            <a data-value="/chat/<%= _.lowerCase(val.body.senderName.replace(/ /g, '-')) %>.<%= _.lowerCase(user.username.replace(/ /g, '-')) %>" href="/chat/<%= _.lowerCase(val.body.senderName) %>.<%= _.lowerCase(user.username.replace(/ /g, '-')) %>"><%= val.body.senderName.replace(/ /g, '-') %></a>
+                        </span>
+                        <% } %>
+                        <span class="tweet__date"> • June 8, 2018</span>
+                        <p class="tweet__content"><%= val.body.message %></p>
+                        <input type="hidden" name="chatId" id="chatId" value="<%= val.body._id %>">
+                    </span>
+                </a>
+                <% } %>
+                <% }) %>
+                <% } %>
+                <li class="dropdown-menu-footer">
+                    <a class="dropdown-item text-muted text-center" href="javascript:void(0)">Read all messages</a>
+                </li>
+            </div>
+        </div>
+    </div>
+</div>
